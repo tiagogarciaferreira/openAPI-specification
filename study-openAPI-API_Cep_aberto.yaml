@@ -1,0 +1,214 @@
+openapi: "3.0.3"
+info:
+  version: 1.0.0
+  title: CEP API
+  license:
+    name: NONE
+    url: NONE
+servers:
+  - url: https://www.cepaberto.com/api/v3
+    description: | 
+      Search CEP API
+
+security:
+  - ApiKeyAuth: ['Token token=69f8a2422791d8c99e0038c76ecc6ba0']
+
+tags:
+  - name: cep
+    description: |
+      Zip code search by number
+  - name: nearest
+    description: |
+      Zip code search by nearest latitude and longitude
+  - name: address
+    description: |
+      Zip code search by state, city, neighborhood and street address
+  - name: cities
+    description: |
+      City search by state
+
+paths:
+  /cep:
+    get:
+      tags:
+        - cep
+      summary: Given a zip code number it fetches the respective data
+      operationId: findByCep
+      parameters:
+        - name: cep
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:    
+              schema:
+                $ref: "#/components/schemas/Cep"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /nearest:
+    get:
+      tags:
+        - nearest
+      summary: From longitude and latitude returns the zip code with their respective data
+      operationId: findCepByLatitudeLongitude
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: lgt
+          in: query
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:    
+              schema:
+                $ref: "#/components/schemas/Cep"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /address:
+    get:
+      tags:
+        - address
+      summary: From the state, city (mandatory), street and district (optional), the CEP with its respective data is returned
+      operationId: findCepByAddress
+      parameters:
+        - name: estado
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: cidade
+          in: query
+          required: true
+          schema: 
+            type: string
+        - name: bairro
+          in: query
+          schema:
+            type: string
+        - name: logradouro
+          in: query
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cep"
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /cities:
+    get:
+      tags:
+        - cities
+      summary: Returns all cities and towns in a certain state
+      operationId: listCitiesByState
+      parameters:
+        - name: estado
+          in: query
+          required: true
+          schema:
+            type: string
+          example:
+            - RS
+            - MG
+            - SP
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Cidade"
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Cep:
+      type: object
+      properties:
+        altitude:
+          type: string
+        cep:
+          type: string
+        latitude:
+          type: string
+        longitude:
+          type: string
+        logradouro:
+          type: string
+        bairro:
+          type: string
+        complemento:
+          type: string
+        cidade:
+          $ref: "#/components/schemas/Cidade"
+        estado:
+          $ref: "#/components/schemas/Estado"
+
+    Cidade:
+      type: object
+      properties:
+        ddd:
+          type: integer
+          format: int64
+        ibge:
+          type: string
+        nome:
+          type: string
+    
+    Estado:
+      type: object
+      properties:
+        sigla:
+          type: string
+      
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int64
+        message:
+          type: string
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization

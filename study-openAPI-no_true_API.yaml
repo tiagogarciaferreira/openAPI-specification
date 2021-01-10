@@ -1,0 +1,320 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Car API
+  license:
+    name: NONE
+servers:
+  - url: http://localhost:8080/carAPI/v1
+    description: Car management API 
+paths:
+  /cars:
+    post:
+      summary: Create a car
+      operationId: createCars
+      tags:
+        - cars
+      requestBody:
+        required: true
+        content:
+          applicaton/json;charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/Car"
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/json;charset=UTF-8:    
+              schema:
+                $ref: "#/components/schemas/Car"
+        '400':
+          description: Bad request, the syntax for this request is incorrect
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    get:
+      summary: List all cars
+      operationId: listCars
+      tags:
+        - cars
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:    
+              schema:
+                $ref: "#/components/schemas/Cars"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /cars/{carsId}:
+    get:
+      summary: Info for a specific car
+      operationId: findCarById
+      tags:
+        - cars
+      parameters:
+        - name: carsId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Car"
+        '400':
+          description: Bad request, the syntax for this request is incorrect
+        '404':
+          description: Not found, the resource with this specified ID was not found  
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: update for a specific car
+      operationId: updateCarById
+      tags:
+        - cars
+      parameters:
+        - name: carsId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          applicaton/json;charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/Car"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:    
+              schema:
+                $ref: "#/components/schemas/Car"
+        '400':
+          description: Bad request, the syntax for this request is incorrect
+        '404':
+          description: Not found, the resource with this specified ID was not found  
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: delete for a specific car
+      operationId: deleteCarById
+      tags:
+        - cars
+      parameters:
+        - name: carsId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: OK, No Content
+        '400':
+          description: Bad request, the syntax for this request is incorrect
+        '404':
+          description: Not found, the resource with this specified ID was not found  
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"                       
+  /brands:
+    post:
+      summary: Create a brand
+      operationId: createBrand
+      tags:
+        - brands
+      requestBody:
+        required: true
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/Brand"
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Brand"
+        '400':
+          description: Bad request, the syntax for this request is incorrect
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"    
+
+    get:
+      summary: List all brands
+      operationId: listBrands
+      tags:
+        - brands
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Brands"
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  
+  /brands/{brandId}:
+    get:
+      summary: Info for a specific brand
+      operationId: findyBrandById
+      tags:
+        - brands
+      parameters:
+        - name: brandId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Brand"
+        '400':
+          description: Bad request, the syntax for this request is incorrect
+        '404':
+          description: Not found, the resource with this specified ID was not found  
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error" 
+                
+    put:
+      summary: update for a specific brand      
+      operationId: updateBrandById
+      tags:
+        - brands
+      parameters:
+        - name: brandId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: "#/components/schemas/Brand"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Brand"
+        '400':
+          description: Bad request, the syntax for this request is incorrect
+        '404':
+          description: Not found, the resource with this specified ID was not found  
+        default:
+          description: unexpected error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      summary: delete for a specific brand 
+      operationId: deleteBrandById
+      tags:
+        - brands
+      parameters:
+        - name: brandId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: OK, No Content
+        '400':
+          description: Bad request, the syntax for this request is incorrect
+        '404':
+          description: Not found, the resource with this specified ID was not found  
+        default:
+          description: unexpected error  
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Car:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Cars:
+      type: array
+      items:
+        $ref: "#/components/schemas/Car"
+    Brand:
+      type: object
+      required: 
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Brands:
+      type: array
+      items:
+        $ref: "#/components/schemas/Brand"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int64
+        message:
+          type: string
